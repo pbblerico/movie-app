@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Movie App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">Log In</string>
+    <string name="signup">Sign Up</string>
+    <string name="welcome">Welcome!</string>
+    <string name="welcome_message">Please, log in or sign up to continue. Have Fun!</string>
+    <string name="home">Home</string>
+    <string name="acc">Account</string>
+    <string name="fav">Favourite</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+    <string name="name">name</string>
+    <string name="surname">surname</string>
+</resources>
