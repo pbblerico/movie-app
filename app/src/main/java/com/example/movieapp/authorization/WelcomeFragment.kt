@@ -1,4 +1,4 @@
-package com.example.movieapp.fragments.authorization
+package com.example.movieapp.authorization
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
+import com.example.movieapp.authorization.ui.LoginFragment
+import com.example.movieapp.authorization.ui.SignUpFragment
 import com.example.movieapp.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment : Fragment(R.layout.fragment_welcome), View.OnClickListener {

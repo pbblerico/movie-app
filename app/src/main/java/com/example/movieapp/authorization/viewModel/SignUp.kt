@@ -1,4 +1,4 @@
-package com.example.movieapp.viewModels
+package com.example.movieapp.authorization.viewModel
 
 import android.content.Context
 import android.util.Log
@@ -17,11 +17,11 @@ object SignUp {
     private val TAG = "SIGN_UP"
 
     fun signup(name: String, surname: String, email: String, password1: String, password2: String, cont: Context): Boolean {
-        this.name = name
-        this.surname = surname
-        this.email = email
-        this.password1 = password1
-        this.password2 = password2
+        SignUp.name = name
+        SignUp.surname = surname
+        SignUp.email = email
+        SignUp.password1 = password1
+        SignUp.password2 = password2
 
         if(validateData(cont)) {
             auth.createUserWithEmailAndPassword(email, password1).addOnSuccessListener {

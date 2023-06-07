@@ -1,4 +1,4 @@
-package com.example.movieapp.viewModels
+package com.example.movieapp.authorization.viewModel
 
 import android.content.Context
 import android.util.Log
@@ -11,8 +11,8 @@ object LogIn {
     private val TAG = "LOG_IN"
 
     fun login(email: String, password: String, cont: Context): Boolean {
-        this.email = email
-        this.password = password
+        LogIn.email = email
+        LogIn.password = password
 
         if(validateData(cont)) {
             auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
@@ -22,7 +22,7 @@ object LogIn {
                 Log.e("TAG", "$e")
             }
         }
-        return LogIn.auth.currentUser != null
+        return auth.currentUser != null
     }
 
 

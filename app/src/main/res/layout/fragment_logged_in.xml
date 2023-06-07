@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/child_fragment_cont"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

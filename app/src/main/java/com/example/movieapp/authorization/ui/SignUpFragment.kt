@@ -1,7 +1,6 @@
-package com.example.movieapp.fragments.authorization
+package com.example.movieapp.authorization.ui
 
 import android.content.Context
-import android.os.Binder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +10,7 @@ import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.databinding.FragmentSignUpBinding
 import com.example.movieapp.fragments.LoggedInFragment
-import com.example.movieapp.viewModels.SignUp
+import com.example.movieapp.authorization.viewModel.SignUp
 
 class SignUpFragment : Fragment(R.layout.fragment_sign_up), View.OnClickListener {
     private lateinit var binding: FragmentSignUpBinding

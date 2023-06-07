@@ -14,4 +14,12 @@
     <string name="email">email</string>
     <string name="name">name</string>
     <string name="surname">surname</string>
+    <string name="movie">movie</string>
+    <string name="movieInfo">Movie Info :</string>
+    <string name="rel_date">ReleaseDate: </string>
+    <string name="rating">Rating:</string>
+    <string name="overview">Overview :</string>
+    <string name="id">id</string>
+    <string name="favList">Favourite List</string>
+    <string name="movList">Movie List</string>
 </resources>
