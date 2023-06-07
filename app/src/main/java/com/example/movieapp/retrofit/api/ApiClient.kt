@@ -1,7 +1,7 @@
 package com.example.movieapp.retrofit.api
 
-import com.example.movieapp.retrofit.Constants.API_KEY
-import com.example.movieapp.retrofit.Constants.BASE_URL
+import com.example.movieapp.utils.Constants.API_KEY
+import com.example.movieapp.utils.Constants.BASE_URL
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ApiClient {
-    private lateinit var retrofit: Retrofit
+    private var retrofit: Retrofit? = null
 
     private val requestInterceptor = Interceptor { chain ->
         val url = chain.request()
@@ -37,6 +37,6 @@ class ApiClient {
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        return retrofit
+        return retrofit!!
     }
 }

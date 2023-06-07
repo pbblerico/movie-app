@@ -4,16 +4,16 @@ import com.google.gson.annotations.SerializedName
 
 
 data class MovieListResponse(
-    @SerializedName("page")
-    val page: Int, // 1
+//    @SerializedName("page")
+//    val page: Int, // 1
     @SerializedName("results")
-    val results: List<Result>,
-    @SerializedName("total_pages")
-    val totalPages: Int, // 34218
-    @SerializedName("total_results")
-    val totalResults: Int // 684341
+    val results: List<Movies>,
+//    @SerializedName("total_pages")
+//    val totalPages: Int, // 34218
+//    @SerializedName("total_results")
+//    val totalResults: Int // 684341
 ) {
-    open class Result(
+    open class Movies(
         @SerializedName("adult")
         open val adult: Boolean = false, // false
         @SerializedName("backdrop_path")
@@ -36,8 +36,8 @@ data class MovieListResponse(
         open val releaseDate: String, // 2022-05-04
         @SerializedName("title")
         open val title: String, // Doctor Strange in the Multiverse of Madness
-        @SerializedName("video")
-        open val video: Boolean, // false
+//        @SerializedName("video")
+//        open val video: Boolean, // false
         @SerializedName("vote_average")
         open val voteAverage: Double, // 7.5
         @SerializedName("vote_count")

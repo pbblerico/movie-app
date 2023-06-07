@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.AccountFragment"
+    tools:context=".accountPage.ui.AccountFragment"
     android:paddingBottom="30dp"
-    android:layout_margin="5dp"
     android:background="@drawable/card_lighter">
 
     <!-- TODO: Update blank fragment layout -->

@@ -15,7 +15,7 @@ import coil.size.Scale
 import com.example.movieapp.R
 import com.example.movieapp.activity.MovieDetailActivity
 import com.example.movieapp.databinding.ItemViewBinding
-import com.example.movieapp.retrofit.Constants.POSTER_BASE_URL
+import com.example.movieapp.utils.Constants.POSTER_BASE_URL
 import com.example.movieapp.models.MovieListResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -41,7 +41,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         holder.likeBtn.setOnClickListener { addToFav(model) }
     }
 
-    private fun addToFav(model: MovieListResponse.Result) {
+    private fun addToFav(model: MovieListResponse.Movies) {
         val timestamp = System.currentTimeMillis()
 
         val hashMap = HashMap<String, Any>()
@@ -68,7 +68,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         var likeBtn: ImageView = binding.imgLike
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: MovieListResponse.Result) {
+        fun bind(item: MovieListResponse.Movies) {
             binding.apply {
                 tvMovieName.text = item.title
                 tvMovieDateRelease.text = item.releaseDate
@@ -91,12 +91,12 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         }
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<MovieListResponse.Result>() {
-        override fun areItemsTheSame(oldItem: MovieListResponse.Result, newItem: MovieListResponse.Result): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<MovieListResponse.Movies>() {
+        override fun areItemsTheSame(oldItem: MovieListResponse.Movies, newItem: MovieListResponse.Movies): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: MovieListResponse.Result, newItem: MovieListResponse.Result): Boolean {
+        override fun areContentsTheSame(oldItem: MovieListResponse.Movies, newItem: MovieListResponse.Movies): Boolean {
             return oldItem == newItem
         }
     }

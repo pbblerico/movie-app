@@ -1,7 +1,6 @@
 package com.example.movieapp.movieList.ui
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,10 +20,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MovieFragment : Fragment(R.layout.fragment_movie) {
-   private lateinit var binding: FragmentMovieBinding
+   private var binding: FragmentMovieBinding? = null
 
-   private lateinit var mainActivity: MainActivity
-   private lateinit var cont: Context
    private val TAG = "MOVIE"
    private val movieAdapter by lazy { MovieAdapter() }
 
@@ -39,22 +36,23 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
    ): View? {
       binding = FragmentMovieBinding.inflate(inflater, container, false)
 
-      binding.pageTV.setOnClickListener { pagePickDialog() }
+      binding!!.pageTV.setOnClickListener { pagePickDialog() }
       loadMovies()
 
 
-      return binding.root
+      return binding!!.root
    }
 
    private fun loadMovies() {
-      binding.apply {
+      binding!!.apply {
          //show loading
-         prgBarMovies.visibility = View.VISIBLE
+//         prgBarMovies.visibility = View.VISIBLE
+         (requireActivity() as MainActivity).showProgressBar()
          //Call movies api
          val callMoviesApi = api.getPopularMovie(pageTV.text.toString().toInt())
          callMoviesApi.enqueue(object : Callback<MovieListResponse> {
             override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
-               prgBarMovies.visibility = View.GONE
+               (requireActivity() as MainActivity).hideProgressBar()
                when (response.code()) {
                   in 200..299 -> {
                      Log.d("Response Code", " success messages : ${response.code()}")
@@ -64,7 +62,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
                               movieAdapter.differ.submitList(itData)
                               //Recycler
                               rlMovies.apply {
-                                 layoutManager = LinearLayoutManager(cont)
+                                 layoutManager = LinearLayoutManager(requireContext())
                                  adapter = movieAdapter
                               }
                            }
@@ -84,7 +82,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
             }
 
             override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-               prgBarMovies.visibility = View.GONE
+//               prgBarMovies.visibility = View.GONE
                Log.e("onFailure", "Err : ${t.message}")
             }
          })
@@ -96,18 +94,11 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
       for(i in pagesArray.indices) {
          pagesArray[i] = "${i + 1}"
       }
-      val builder = AlertDialog.Builder(cont)
+      val builder = AlertDialog.Builder(requireContext())
       builder.setTitle("Pick Page")
          .setItems(pagesArray) { _, which ->
-            binding.pageTV.text = pagesArray[which]
+            binding!!.pageTV.text = pagesArray[which]
             loadMovies()
          }.show()
    }
-
-   override fun onAttach(context: Context) {
-      mainActivity = activity as MainActivity
-      cont = context
-      super.onAttach(context)
-   }
-
 }

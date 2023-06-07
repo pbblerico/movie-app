@@ -1,13 +1,11 @@
 package com.example.movieapp.favouriteList.ui
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.movieapp.R
-import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.adapter.FavAdapter
 import com.example.movieapp.databinding.FragmentFavouriteBinding
 import com.example.movieapp.models.MovieListResponse
@@ -19,13 +17,11 @@ import com.google.firebase.database.ValueEventListener
 
 
 class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
-   private lateinit var binding: FragmentFavouriteBinding
+   private var binding: FragmentFavouriteBinding? = null
 
-   private lateinit var mainActivity: MainActivity
-   private lateinit var cont: Context
    private val TAG = "FAV"
 
-   private lateinit var favArrayList: ArrayList<MovieListResponse.Result>
+   private lateinit var favArrayList: ArrayList<MovieListResponse.Movies>
    private lateinit var adapterFav: FavAdapter
    override fun onCreateView(
       inflater: LayoutInflater,
@@ -34,14 +30,9 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
    ): View? {
       binding = FragmentFavouriteBinding.inflate(inflater, container, false)
 
-//      val onBackPressedCallBack = object: OnBackPressedCallback(true) {
-//         override fun handleOnBackPressed() {
-//            (parentFragment as LoggedInFragment).insertNestedFragment()
-//         }
-//      }
 
       loadFavs()
-      return binding.root
+      return binding!!.root
    }
 
    private fun loadFavs() {
@@ -51,7 +42,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
       ref.child(FirebaseAuth.getInstance().uid!!).child("Liked")
          .addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-               binding.prgBarMovies.visibility = View.GONE
+//               binding.prgBarMovies.visibility = View.GONE
                favArrayList.clear()
 //               Log.d(TAG, "${snapshot.value}")
                for (ds in snapshot.children) {
@@ -70,28 +61,22 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
                   val voteAverage= 0.0 // 7.5
                   val voteCount= ds.child("voteCount").value as Long // 3987
 ////
-                  val model = MovieListResponse.Result(adult, backdropPath, genreIds, id, originalLanguage, originalTitle, overview, popularity, posterPath, releaseDate, title, video, voteAverage, voteCount)
+                  val model = MovieListResponse.Movies(adult, backdropPath, genreIds, id, originalLanguage, originalTitle, overview, popularity, posterPath, releaseDate, title, voteAverage, voteCount)
 //                  Log.d(TAG, "${ds.value}")
                   favArrayList.add(model)
 
 //                  val model = MovieListResponse.Result()
                }
 
-               adapterFav = FavAdapter(cont, favArrayList)
+               adapterFav = FavAdapter(requireContext(), favArrayList)
 
-               binding.rlMovies.adapter = adapterFav
+               binding!!.rlMovies.adapter = adapterFav
             }
 
             override fun onCancelled(error: DatabaseError) {
                TODO("Not yet implemented")
             }
          })
-   }
-
-   override fun onAttach(context: Context) {
-      mainActivity = activity as MainActivity
-      cont = context
-      super.onAttach(context)
    }
 
 }

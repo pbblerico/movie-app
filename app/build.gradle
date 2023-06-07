@@ -74,4 +74,9 @@ dependencies {
     //Image loading
     implementation 'io.coil-kt:coil:1.4.0'
 
+
+    //koin
+//    implementation "org.koin:koin-android-viewmodel:3.2.0"
+//    implementation "org.koin:koin-android:3.2.0"
+    implementation "io.insert-koin:koin-android:3.2.0"
 }
