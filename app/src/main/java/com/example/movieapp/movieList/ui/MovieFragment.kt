@@ -71,52 +71,6 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
       }
    }
 
-//   private fun loadMovies() {
-//      binding!!.apply {
-//         //show loading
-////         prgBarMovies.visibility = View.VISIBLE
-//         (requireActivity() as MainActivity).showProgressBar()
-//         //Call movies api
-//         val callMoviesApi = api.getPopularMovie(pageTV.text.toString().toInt())
-//         callMoviesApi.enqueue(object : Callback<MovieListResponse> {
-//            override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
-//               (requireActivity() as MainActivity).hideProgressBar()
-//               when (response.code()) {
-//                  in 200..299 -> {
-//                     Log.d("Response Code", " success messages : ${response.code()}")
-//                     response.body()?.let { itBody ->
-//                        itBody.results.let { itData ->
-//                           if (itData.isNotEmpty()) {
-//                              movieAdapter.differ.submitList(itData)
-//                              //Recycler
-//                              rlMovies.apply {
-//                                 layoutManager = LinearLayoutManager(requireContext())
-//                                 adapter = movieAdapter
-//                              }
-//                           }
-//                        }
-//                     }
-//                  }
-//                  in 300..399 -> {
-//                     Log.d("Response Code", " Redirection messages : ${response.code()}")
-//                  }
-//                  in 400..499 -> {
-//                     Log.d("Response Code", " Client error responses : ${response.code()}")
-//                  }
-//                  in 500..599 -> {
-//                     Log.d("Response Code", " Server error responses : ${response.code()}")
-//                  }
-//               }
-//            }
-//
-//            override fun onFailure(call: Call<MovieListResponse>, t: Throwable) {
-////               prgBarMovies.visibility = View.GONE
-//               Log.e("onFailure", "Err : ${t.message}")
-//            }
-//         })
-//      }
-//   }
-
    private fun pagePickDialog() {
       val pagesArray = arrayOfNulls<String>(10)
       for(i in pagesArray.indices) {
@@ -126,7 +80,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
       builder.setTitle("Pick Page")
          .setItems(pagesArray) { _, which ->
             binding!!.pageTV.text = pagesArray[which]
-//            loadMovies()
+            load()
          }.show()
    }
 }

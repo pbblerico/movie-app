@@ -10,7 +10,7 @@ import com.example.movieapp.utils.Result
 
 interface ApiServiceTest {
     @GET("movie/{movie_id}")
-    suspend fun getMovieDetails(@Path("movie_id") id: Long): Result<Movie>
+    suspend fun getMovieDetails(@Path("movie_id") id: Long): Movie
 
     @GET("movie/popular")
     suspend fun getPopularMovie(@Query("page") page: Int): MovieListResponse

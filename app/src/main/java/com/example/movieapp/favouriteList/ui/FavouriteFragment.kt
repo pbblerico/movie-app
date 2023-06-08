@@ -22,7 +22,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
 
    private val TAG = "FAV"
 
-   private lateinit var favArrayList: ArrayList<MovieListResponse.Movies>
+   private lateinit var favArrayList: ArrayList<Movie>
    private lateinit var adapterFav: FavAdapter
    override fun onCreateView(
       inflater: LayoutInflater,

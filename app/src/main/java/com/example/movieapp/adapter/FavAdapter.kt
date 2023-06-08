@@ -15,6 +15,7 @@ import coil.size.Scale
 import com.example.movieapp.R
 import com.example.movieapp.activity.MovieDetailActivity
 import com.example.movieapp.databinding.ItemViewBinding
+import com.example.movieapp.models.Movie
 import com.example.movieapp.models.MovieListResponse
 import com.example.movieapp.utils.Constants.POSTER_BASE_URL
 import com.google.android.material.imageview.ShapeableImageView
@@ -27,9 +28,9 @@ import com.google.firebase.database.ValueEventListener
 class FavAdapter : RecyclerView.Adapter<FavAdapter.HolderFav> {
     private lateinit var binding: ItemViewBinding
     private var context: Context
-    var movieArrayList: ArrayList<MovieListResponse.Movies>
+    var movieArrayList: ArrayList<Movie>
 
-    constructor(context: Context, movieArrayList: ArrayList<MovieListResponse.Movies>) {
+    constructor(context: Context, movieArrayList: ArrayList<Movie>) {
         this.context = context
         this.movieArrayList = movieArrayList
     }
@@ -93,7 +94,7 @@ class FavAdapter : RecyclerView.Adapter<FavAdapter.HolderFav> {
         }
     }
 
-    fun delete(model: MovieListResponse.Movies, holder: FavAdapter.HolderFav) {
+    fun delete(model: Movie, holder: FavAdapter.HolderFav) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Delete")
             .setMessage("Are you sure you want to remove this book from favourites?")
@@ -106,7 +107,7 @@ class FavAdapter : RecyclerView.Adapter<FavAdapter.HolderFav> {
             }.show()
     }
 
-    private fun removeFromFav(model: MovieListResponse.Movies, holder: FavAdapter.HolderFav) {
+    private fun removeFromFav(model: Movie, holder: FavAdapter.HolderFav) {
 
         val ref = FirebaseDatabase.getInstance().getReference("Users")
         ref.child(FirebaseAuth.getInstance().uid!!).child("Liked").child(model.id.toString())

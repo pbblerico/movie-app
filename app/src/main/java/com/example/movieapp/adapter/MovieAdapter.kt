@@ -15,6 +15,7 @@ import coil.size.Scale
 import com.example.movieapp.R
 import com.example.movieapp.activity.MovieDetailActivity
 import com.example.movieapp.databinding.ItemViewBinding
+import com.example.movieapp.models.Movie
 import com.example.movieapp.utils.Constants.POSTER_BASE_URL
 import com.example.movieapp.models.MovieListResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -41,7 +42,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         holder.likeBtn.setOnClickListener { addToFav(model) }
     }
 
-    private fun addToFav(model: MovieListResponse.Movies) {
+    private fun addToFav(model: Movie) {
         val timestamp = System.currentTimeMillis()
 
         val hashMap = HashMap<String, Any>()
@@ -68,7 +69,7 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         var likeBtn: ImageView = binding.imgLike
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: MovieListResponse.Movies) {
+        fun bind(item: Movie) {
             binding.apply {
                 tvMovieName.text = item.title
                 tvMovieDateRelease.text = item.releaseDate
@@ -91,12 +92,12 @@ class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         }
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<MovieListResponse.Movies>() {
-        override fun areItemsTheSame(oldItem: MovieListResponse.Movies, newItem: MovieListResponse.Movies): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: MovieListResponse.Movies, newItem: MovieListResponse.Movies): Boolean {
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem == newItem
         }
     }
