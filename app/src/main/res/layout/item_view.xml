@@ -128,7 +128,7 @@
         android:layout_marginStart="20dp">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ImgMovie"
+            android:id="@+id/movieImg"
             android:layout_width="115dp"
             android:layout_height="160dp"
             android:scaleType="fitXY"

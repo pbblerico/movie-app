@@ -1,106 +1,58 @@
 package com.example.movieapp.adapter
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
 import com.example.movieapp.R
-import com.example.movieapp.activity.MovieDetailActivity
 import com.example.movieapp.databinding.ItemViewBinding
 import com.example.movieapp.models.Movie
+import com.example.movieapp.movieList.ui.MovieFragmentDirections
 import com.example.movieapp.utils.Constants.POSTER_BASE_URL
-import com.example.movieapp.models.MovieListResponse
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 
-
-class MovieAdapter: RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
-
-    private lateinit var binding: ItemViewBinding
-    private lateinit var context: Context
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        binding = ItemViewBinding.inflate(inflater, parent, false)
-        context = parent.context
-        return ViewHolder()
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val model = differ.currentList[position]
-
-        holder.bind(differ.currentList[position])
-
-        holder.likeBtn.setOnClickListener { addToFav(model) }
-    }
-
-    private fun addToFav(model: Movie) {
-        val timestamp = System.currentTimeMillis()
-
-        val hashMap = HashMap<String, Any>()
-
-        val ref = FirebaseDatabase.getInstance().getReference("Users")
-        ref.child(FirebaseAuth.getInstance().uid!!).child("Liked").child(model.id.toString())
-            .setValue(model)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Added to favourite", Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener {e->
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    override fun getItemCount(): Int {
-        return differ.currentList.size
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
-
-    inner class ViewHolder : RecyclerView.ViewHolder(binding.root) {
-        var likeBtn: ImageView = binding.imgLike
-
-        @SuppressLint("SetTextI18n")
-        fun bind(item: Movie) {
+class MovieAdapter: ListAdapter<Movie, MovieAdapter.MovieViewHolder>(DiffCallback()) {
+    class MovieViewHolder(private val binding: ItemViewBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(movie: Movie) {
             binding.apply {
-                tvMovieName.text = item.title
-                tvMovieDateRelease.text = item.releaseDate
-                tvRate.text=item.voteAverage.toString()
-                val moviePosterURL = POSTER_BASE_URL + item?.posterPath
-                ImgMovie.load(moviePosterURL){
+                tvMovieName.text = movie.title
+                tvRate.text = movie.voteAverage.toString()
+                tvLang.text = movie.originalLanguage
+                tvMovieDateRelease.text = movie.releaseDate
+
+                val image = POSTER_BASE_URL + movie.posterPath
+                movieImg.load(image) {
                     crossfade(true)
                     placeholder(R.drawable.poster_placeholder)
                     scale(Scale.FILL)
                 }
-                tvLang.text=item.originalLanguage
-
-                root.setOnClickListener {
-                    val intent = Intent(context, MovieDetailActivity::class.java)
-                    intent.putExtra("id", item?.id)
-                    context.startActivity(intent)
-                }
             }
-
         }
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.id == newItem.id
-        }
+    class DiffCallback: DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem
     }
 
-    val differ = AsyncListDiffer(this, differCallback)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        val binding = ItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MovieViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        val currentItem = getItem(position)
+        holder.bind(currentItem)
+
+        holder.itemView.setOnClickListener {
+            Log.d("ADP", "works")
+            val action = MovieFragmentDirections.toMovieDetailFragment(currentItem.id)
+            Navigation.findNavController(it).navigate(action)
+        }
+    }
 }

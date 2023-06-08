@@ -63,7 +63,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) , View.OnClickListener {
                     (requireActivity() as MainActivity).showBottomNavBar()
                     Navigation.findNavController(requireView()).navigate(R.id.toMovieFragment)
                 }
-                is Result.Failure -> {
+                else -> {
                     (requireActivity() as MainActivity).hideProgressBar()
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }

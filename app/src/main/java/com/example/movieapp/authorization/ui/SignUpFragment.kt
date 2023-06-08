@@ -58,7 +58,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up), View.OnClickListener
                     (requireActivity() as MainActivity).hideProgressBar()
                     Navigation.findNavController(requireView()).navigate(R.id.signUpToLoginFragment)
                 }
-                is Result.Failure -> {
+                else -> {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     (requireActivity() as MainActivity).hideProgressBar()
                 }

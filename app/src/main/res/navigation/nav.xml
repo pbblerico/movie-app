@@ -56,7 +56,7 @@
             android:id="@+id/favouriteBackToMovieFragment"
             app:destination="@id/movieFragment" />
         <action
-            android:id="@+id/toFavMovieDetailFragment"
+            android:id="@+id/favToMovieDetailFragment"
             app:destination="@id/movieDetailFragment" />
     </fragment>
     <fragment

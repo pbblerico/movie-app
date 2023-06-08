@@ -28,11 +28,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
    private val viewModel by viewModel<MovieViewModel>()
 
    private val TAG = "MOVIE"
-   private val movieAdapter by lazy { MovieAdapter() }
-
-   private val api: ApiService by lazy {
-      ApiClient().getClient().create(ApiService::class.java)
-   }
+   private var movieAdapter: MovieAdapter? = null
 
    override fun onCreateView(
       inflater: LayoutInflater,
@@ -42,30 +38,35 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
       binding = FragmentMovieBinding.inflate(inflater, container, false)
 
       binding!!.pageTV.setOnClickListener { pagePickDialog() }
-//      loadMovies()
+      movieAdapter = MovieAdapter()
+      binding!!.rlMovies.adapter = movieAdapter
       load()
 
       return binding!!.root
    }
 
+
+
    private fun load() {
       viewModel.getMovieList(binding!!.pageTV.text.toString().toInt())
 
-      viewModel.movieListStatus.observe(viewLifecycleOwner) { it ->
+      viewModel.movieListStatus.observe(viewLifecycleOwner) {
          when(it) {
             is Result.Loading -> {
                (requireActivity() as MainActivity).showProgressBar()
             }
             is Result.Success -> {
-//               Toast.makeText(requireContext(), "Works", Toast.LENGTH_SHORT).show()
-//               Log.d(TAG, "${it.data.forEach {  }}")
-               it.data!!.forEach {m ->
-                  Log.d(TAG, "${m.id}")
-               }
+               (requireActivity() as MainActivity).hideProgressBar()
+               movieAdapter!!.submitList(it.data)
             }
 
             is Result.Failure -> {
+               (requireActivity() as MainActivity).hideProgressBar()
                Toast.makeText(requireContext(), "Sorry", Toast.LENGTH_SHORT).show()
+            }
+
+            is Result.Empty -> {
+               Toast.makeText(requireContext(), "Page is empty", Toast.LENGTH_SHORT).show()
             }
          }
       }
