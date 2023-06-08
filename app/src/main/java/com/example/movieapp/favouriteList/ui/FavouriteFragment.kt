@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.movieapp.R
 import com.example.movieapp.adapter.FavAdapter
 import com.example.movieapp.databinding.FragmentFavouriteBinding
+import com.example.movieapp.models.Movie
 import com.example.movieapp.models.MovieListResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -57,11 +58,10 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
                   val posterPath= ds.child("posterPath").value.toString()  // /9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg
                   val releaseDate= ds.child("releaseDate").value.toString() // 2022-05-04
                   val title = ds.child("title").value.toString() // Doctor Strange in the Multiverse of Madness
-                  val video = ds.child("video").value as Boolean // false
                   val voteAverage= 0.0 // 7.5
                   val voteCount= ds.child("voteCount").value as Long // 3987
 ////
-                  val model = MovieListResponse.Movies(adult, backdropPath, genreIds, id, originalLanguage, originalTitle, overview, popularity, posterPath, releaseDate, title, voteAverage, voteCount)
+                  val model = Movie(adult, backdropPath, genreIds, id, originalLanguage, originalTitle, overview, popularity, posterPath, releaseDate, title, voteAverage, voteCount)
 //                  Log.d(TAG, "${ds.value}")
                   favArrayList.add(model)
 
