@@ -76,4 +76,7 @@ dependencies {
 
     //koin
     implementation "io.insert-koin:koin-android:3.2.0"
+
+    //paging3
+    implementation("androidx.paging:paging-runtime:3.1.1")
 }

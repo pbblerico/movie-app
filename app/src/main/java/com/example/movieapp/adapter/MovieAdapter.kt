@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +16,11 @@ import com.example.movieapp.models.Movie
 import com.example.movieapp.movieList.ui.MovieFragmentDirections
 import com.example.movieapp.utils.Constants.POSTER_BASE_URL
 
-class MovieAdapter: ListAdapter<Movie, MovieAdapter.MovieViewHolder>(DiffCallback()) {
-    class MovieViewHolder(private val binding: ItemViewBinding): RecyclerView.ViewHolder(binding.root) {
+class MovieAdapter(val someAction: () -> Unit): PagingDataAdapter<Movie, MovieAdapter.MovieViewHolder>(DiffCallback()) {
+    class MovieViewHolder(private val binding: ItemViewBinding, val someAction: () -> Unit ): RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.apply {
+                someAction()
                 tvMovieName.text = movie.title
                 tvRate.text = movie.voteAverage.toString()
                 tvLang.text = movie.originalLanguage
@@ -42,7 +44,7 @@ class MovieAdapter: ListAdapter<Movie, MovieAdapter.MovieViewHolder>(DiffCallbac
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = ItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder(binding)
+        return MovieViewHolder(binding, someAction)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -50,6 +52,7 @@ class MovieAdapter: ListAdapter<Movie, MovieAdapter.MovieViewHolder>(DiffCallbac
         holder.bind(currentItem)
 
         holder.itemView.setOnClickListener {
+            someAction.invoke()
             Log.d("ADP", "works")
             val action = MovieFragmentDirections.toMovieDetailFragment(currentItem.id)
             Navigation.findNavController(it).navigate(action)

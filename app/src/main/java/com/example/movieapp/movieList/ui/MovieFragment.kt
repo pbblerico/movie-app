@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.adapter.MovieAdapter
 import com.example.movieapp.databinding.FragmentMovieBinding
 import com.example.movieapp.movieList.viewModel.MovieViewModel
 import com.example.movieapp.utils.Result
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieFragment : Fragment(R.layout.fragment_movie) {
@@ -30,7 +34,11 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
       binding = FragmentMovieBinding.inflate(inflater, container, false)
 
       binding!!.pageTV.setOnClickListener { pagePickDialog() }
-      movieAdapter = MovieAdapter()
+      movieAdapter = MovieAdapter(
+         action = {
+            viewModel.getMovieList()
+         }
+      )
       binding!!.rlMovies.adapter = movieAdapter
       load()
 
@@ -42,14 +50,28 @@ class MovieFragment : Fragment(R.layout.fragment_movie) {
    private fun load() {
       viewModel.getMovieList(binding!!.pageTV.text.toString().toInt())
 
-      viewModel.movieListStatus.observe(viewLifecycleOwner) {
+      lifecycleScope.launch {
+         viewModel.movieListPaging.collectLatest {
+            movieAdapter?.submitData(it)
+         }
+      }
+      lifecycleScope.launch {
+         movieAdapter?.loadStateFlow?.collectLatest {
+            when (val loadState = it.refresh) {
+               is LoadState.Error -> {
+                  loadState.error
+               }
+            }
+         }
+      }
+      viewModel.movieListPaging.observe(viewLifecycleOwner) {
          when(it) {
             is Result.Loading -> {
                (requireActivity() as MainActivity).showProgressBar()
             }
             is Result.Success -> {
                (requireActivity() as MainActivity).hideProgressBar()
-               movieAdapter!!.submitList(it.data)
+               movieAdapter!!.submitData(viewModel.movieListPaging)
             }
 
             is Result.Failure -> {
