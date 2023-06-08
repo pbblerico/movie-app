@@ -7,6 +7,6 @@ import com.example.movieapp.utils.Result
 interface MovieRepository {
     suspend fun getMovieList(page: Int): Result<List<Movie>>
 
-    suspend fun getMovieDetail(id: Long): Result<Movie>
+
 
 }

@@ -2,26 +2,18 @@ package com.example.movieapp.movieList.ui
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.adapter.MovieAdapter
 import com.example.movieapp.databinding.FragmentMovieBinding
-import com.example.movieapp.models.MovieListResponse
 import com.example.movieapp.movieList.viewModel.MovieViewModel
-import com.example.movieapp.retrofit.api.ApiClient
-import com.example.movieapp.retrofit.api.ApiService
 import com.example.movieapp.utils.Result
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MovieFragment : Fragment(R.layout.fragment_movie) {
    private var binding: FragmentMovieBinding? = null

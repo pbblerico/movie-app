@@ -4,10 +4,16 @@ import com.example.movieapp.authorization.repository.AuthRepository
 import com.example.movieapp.authorization.repository.AuthRepositoryImpl
 import com.example.movieapp.authorization.viewModel.LoginViewModel
 import com.example.movieapp.authorization.viewModel.SignUpViewModel
+import com.example.movieapp.favouriteList.repository.FavouritesRepository
+import com.example.movieapp.favouriteList.repository.FavouritesRepositoryImpl
+import com.example.movieapp.favouriteList.viewModel.FavouritesViewModel
+import com.example.movieapp.movieDetail.repository.MovieDetailRepository
+import com.example.movieapp.movieDetail.repository.MovieDetailRepositoryImpl
+import com.example.movieapp.movieDetail.viewModel.MovieDetailViewModel
 import com.example.movieapp.movieList.repository.MovieRepository
 import com.example.movieapp.movieList.repository.MovieRepositoryImpl
 import com.example.movieapp.movieList.viewModel.MovieViewModel
-import com.example.movieapp.retrofit.api.ApiServiceTest
+import com.example.movieapp.retrofit.api.ApiService
 import com.example.movieapp.utils.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -24,11 +30,15 @@ val appModule = module {
     single { retrofit(get()) }
     single { apiService(get()) }
     single<MovieRepository> { return@single MovieRepositoryImpl(get()) }
+    single<FavouritesRepository> { return@single FavouritesRepositoryImpl()}
+    single<MovieDetailRepository> { return@single MovieDetailRepositoryImpl(get()) }
 
 
     viewModel { LoginViewModel(get()) }
     viewModel { SignUpViewModel(get()) }
     viewModel { MovieViewModel(get()) }
+    viewModel { FavouritesViewModel(get()) }
+    viewModel { MovieDetailViewModel(get())}
 }
 
 private fun interceptor(): Interceptor =
@@ -60,5 +70,5 @@ private fun retrofit(okHttpClient: OkHttpClient): Retrofit =
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-private fun apiService(retrofit: Retrofit): ApiServiceTest =
-    retrofit.create(ApiServiceTest::class.java)
+private fun apiService(retrofit: Retrofit): ApiService =
+    retrofit.create(ApiService::class.java)

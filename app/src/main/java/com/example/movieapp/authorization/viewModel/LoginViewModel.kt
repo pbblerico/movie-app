@@ -1,5 +1,6 @@
 package com.example.movieapp.authorization.viewModel
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,14 +16,19 @@ class LoginViewModel(private val authRepository: AuthRepository): ViewModel() {
     val loginStatus: LiveData<Result<AuthResult>> = _loginStatus
 
     fun login(email: String, password: String) {
-        if(email.isEmpty() || password.isEmpty()) {
-            _loginStatus.postValue(Result.Failure("Blank fields"))
-        } else {
-            _loginStatus.postValue(Result.Loading())
-            viewModelScope.launch(Dispatchers.Main){
-                val loginResult = authRepository.login(email, password)
-                _loginStatus.postValue(loginResult)
-            }
+        val error =
+            if(email.isEmpty() || password.isEmpty()) "Blank fields"
+            else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) "Not a valid Email"
+            else null
+
+        error?.let {
+            _loginStatus.postValue(Result.Failure(it))
+            return
+        }
+        _loginStatus.postValue(Result.Loading())
+        viewModelScope.launch(Dispatchers.Main){
+            val loginResult = authRepository.login(email, password)
+            _loginStatus.postValue(loginResult)
         }
     }
 }

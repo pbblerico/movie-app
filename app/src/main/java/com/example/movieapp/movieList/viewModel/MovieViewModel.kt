@@ -25,12 +25,4 @@ class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() 
             _movieListStatus.postValue(result)
         }
     }
-
-    fun getMovieDetails(id: Long) {
-        _movieDetailStatus.postValue(Result.Loading())
-        viewModelScope.launch(Dispatchers.Main) {
-            val result = movieRepository.getMovieDetail(id)
-            _movieDetailStatus.postValue(result)
-        }
-    }
 }
