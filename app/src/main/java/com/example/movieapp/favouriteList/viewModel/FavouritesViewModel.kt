@@ -19,7 +19,6 @@ class FavouritesViewModel(private val favouritesRepository: FavouritesRepository
         _favouritesListStatus.postValue(Result.Loading())
         viewModelScope.launch(Dispatchers.Main) {
             favouritesRepository.getFavouritesList {
-                Log.d("FVM", it.data!!.isEmpty().toString())
                 _favouritesListStatus.postValue(it)
             }
         }

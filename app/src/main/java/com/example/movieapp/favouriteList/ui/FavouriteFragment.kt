@@ -38,8 +38,6 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
    private fun load() {
       viewModel.getFavoritesList()
 
-      Log.d(TAG, "here")
-
       viewModel.favouritesListStatus.observe(viewLifecycleOwner) {
          when (it) {
             is Result.Loading -> {

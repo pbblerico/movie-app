@@ -7,9 +7,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.movieapp.models.Movie
 import com.example.movieapp.movieList.repository.MovieRepository
-import com.example.movieapp.paging.PagingSourceImpl
+import com.example.movieapp.paging.MoviePagingSource
 import com.example.movieapp.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -20,6 +21,9 @@ class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() 
     val movieListStatus: LiveData<Result<List<Movie>>> = _movieListStatus
 
 
+    private val _addToFavStatus = MutableLiveData<Result<String>>()
+    val addToFavStatus: LiveData<Result<String>> = _addToFavStatus
+
     fun getMovieList(page: Int) {
         _movieListStatus.postValue(Result.Loading())
         viewModelScope.launch(Dispatchers.Main) {
@@ -28,27 +32,20 @@ class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() 
         }
     }
 
-//    val movieListStates = movieRepository.getMovieListPaging()
-//        .map {pagingData ->
-//            pagingData.map {
-//
-//            }
-//        }.cachedIn(viewModelScope)
+    fun addToFavourite(movie: Movie) {
+        viewModelScope.launch(Dispatchers.Main) {
+            movieRepository.addToFavourite(movie){
+                _addToFavStatus.postValue(it)
+            }
+        }
+    }
 
-//    fun movieList(page: Int) {
-//        _movieListStatus.postValue(Result.Loading())
-//        viewModelScope.launch(Dispatchers.Main) {
-//            flow.collectLatest { pagingData ->
-//                _movieListStatus.postValue(pagingData)
-//            }
-//        }
-//    }
+//    val movieListPaging: StateFlow<PagingData<Movie>> = flow<PagingData<Movie>> {
+//        movieRepository.getPagedMovieList()
+//    }.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
-    val movieListPaging: StateFlow<PagingData<Movie>> = flow<PagingData<Movie>> {
-        Pager(
-            PagingConfig(pageSize = 20)
-        ){
-            PagingSourceImpl(movieRepository)
-        }.flow
-    }.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+    val moviePaging: Flow<PagingData<Movie>> = movieRepository.getPagedMovieList().cachedIn(viewModelScope)
+    init {
+        getMovieList(1)
+    }
 }
