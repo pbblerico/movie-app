@@ -6,4 +6,6 @@ import com.example.movieapp.utils.Result
 interface FavouritesRepository {
     suspend fun getFavouritesList(result: (Result<List<Movie>>) -> Unit)
 
+    suspend fun removeFromFavourite(id: String, result: (Result<String>) -> Unit)
+
 }

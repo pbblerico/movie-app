@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Scale
+import com.example.movieapp.FavouriteAdapterClickListener
 import com.example.movieapp.R
 import com.example.movieapp.databinding.ItemViewBinding
 import com.example.movieapp.favouriteList.ui.FavouriteFragmentDirections
 import com.example.movieapp.models.Movie
 import com.example.movieapp.utils.Constants.POSTER_BASE_URL
 
-class FavouritesAdapter : ListAdapter<Movie, FavouritesAdapter.FavouritesViewHolder>(DiffCallback()) {
-   class FavouritesViewHolder(private val binding: ItemViewBinding): RecyclerView.ViewHolder(binding.root) {
+class FavouritesAdapter(private val onClickListener: FavouriteAdapterClickListener) : ListAdapter<Movie, FavouritesAdapter.FavouritesViewHolder>(DiffCallback()) {
+   class FavouritesViewHolder(val binding: ItemViewBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.apply {
                 tvMovieName.text = movie.title
@@ -49,8 +50,11 @@ class FavouritesAdapter : ListAdapter<Movie, FavouritesAdapter.FavouritesViewHol
         holder.bind(currentItem)
 
         holder.itemView.setOnClickListener {
-            val action = FavouriteFragmentDirections.favToMovieDetailFragment(currentItem.id)
-            Navigation.findNavController(it).navigate(action)
+            onClickListener.onItemClick(currentItem)
+        }
+
+        holder.binding.imgLike.setOnClickListener {
+            onClickListener.removeFromFavourite(currentItem.id.toString())
         }
     }
 }

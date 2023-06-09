@@ -2,14 +2,12 @@ package com.example.movieapp.movieList.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.example.movieapp.models.Movie
 import com.example.movieapp.paging.MoviePagingSource
 import com.example.movieapp.retrofit.api.ApiService
 import com.example.movieapp.utils.Constants
 import com.example.movieapp.utils.Result
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class MovieRepositoryImpl(private val apiService: ApiService): MovieRepository {
@@ -22,7 +20,7 @@ class MovieRepositoryImpl(private val apiService: ApiService): MovieRepository {
     }
 
     override fun getPagedMovieList() = Pager(
-            PagingConfig(1)
+            PagingConfig(20)
         ) {
             MoviePagingSource(apiService)
         }.flow

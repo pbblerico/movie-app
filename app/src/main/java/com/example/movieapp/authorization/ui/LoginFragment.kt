@@ -48,6 +48,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) , View.OnClickListener {
     private fun login() {
         val email = binding!!.uname.text.toString().trim()
         val password = binding!!.pass.text.toString().trim()
+        Navigation.findNavController(requireView()).navigate(R.id.toMovieFragment)
 
         viewModel.login(email, password)
 

@@ -2,7 +2,6 @@ package com.example.movieapp
 
 import com.example.movieapp.models.Movie
 
-interface MovieAdapterClickListener {
-    fun onItemClick(movie: Movie)
+interface MovieAdapterClickListener: OnClickListener {
     fun onLikeButtonClick(movie: Movie)
 }

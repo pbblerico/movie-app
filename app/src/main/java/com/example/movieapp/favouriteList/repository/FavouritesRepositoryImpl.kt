@@ -44,4 +44,30 @@ class FavouritesRepositoryImpl: FavouritesRepository{
             }
         }
     }
+
+    override suspend fun removeFromFavourite(id: String, result: (Result<String>) -> Unit) {
+
+        withContext(Dispatchers.IO) {
+            try {
+                Constants.ref.getReference("Users")
+                    .child(Constants.auth.uid!!)
+                    .child("Liked")
+                    .child(id)
+                    .removeValue().addOnSuccessListener {
+                        result.invoke(
+                            Result.Success("Deleted")
+                        )
+                    }
+                    .addOnFailureListener {
+                        result.invoke(
+                            Result.Failure("Error")
+                        )
+                    }
+            } catch(e: java.lang.Exception) {
+                result.invoke(
+                    Result.Failure(e.message ?: e.localizedMessage)
+                )
+            }
+        }
+    }
 }

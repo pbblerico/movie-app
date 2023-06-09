@@ -17,6 +17,7 @@ import com.example.movieapp.retrofit.api.ApiService
 import com.example.movieapp.utils.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -57,11 +58,16 @@ private fun interceptor(): Interceptor =
     }
 
 
-private fun okhttpClient(requestInterceptor: Interceptor): OkHttpClient =
-    OkHttpClient.Builder()
+private fun okhttpClient(requestInterceptor: Interceptor): OkHttpClient {
+    val loggingInterceptor = HttpLoggingInterceptor()
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
+
+    return OkHttpClient.Builder()
+    .addInterceptor(loggingInterceptor)
     .addInterceptor(requestInterceptor)
     .connectTimeout(60, TimeUnit.SECONDS)
     .build()
+}
 
 private fun retrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()

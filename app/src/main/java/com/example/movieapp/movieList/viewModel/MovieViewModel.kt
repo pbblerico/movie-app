@@ -4,13 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.movieapp.models.Movie
 import com.example.movieapp.movieList.repository.MovieRepository
-import com.example.movieapp.paging.MoviePagingSource
 import com.example.movieapp.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -39,10 +36,6 @@ class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() 
             }
         }
     }
-
-//    val movieListPaging: StateFlow<PagingData<Movie>> = flow<PagingData<Movie>> {
-//        movieRepository.getPagedMovieList()
-//    }.stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
 
     val moviePaging: Flow<PagingData<Movie>> = movieRepository.getPagedMovieList().cachedIn(viewModelScope)
     init {

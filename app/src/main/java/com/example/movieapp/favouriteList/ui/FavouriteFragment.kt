@@ -1,5 +1,6 @@
 package com.example.movieapp.favouriteList.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,16 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.Navigation
+import com.example.movieapp.FavouriteAdapterClickListener
 import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.adapter.FavouritesAdapter
 import com.example.movieapp.databinding.FragmentFavouriteBinding
 import com.example.movieapp.favouriteList.viewModel.FavouritesViewModel
+import com.example.movieapp.models.Movie
 import com.example.movieapp.utils.Result
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
+class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteAdapterClickListener {
    private var binding: FragmentFavouriteBinding? = null
    private var favouritesAdapter: FavouritesAdapter? = null
    private val viewModel by viewModel<FavouritesViewModel>()
@@ -27,7 +31,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
       savedInstanceState: Bundle?
    ): View? {
       binding = FragmentFavouriteBinding.inflate(inflater, container, false)
-      favouritesAdapter = FavouritesAdapter()
+      favouritesAdapter = FavouritesAdapter(this)
       binding!!.rlMovies.adapter = favouritesAdapter
       load()
 
@@ -63,5 +67,23 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
             }
          }
       }
+   }
+
+   override fun removeFromFavourite(id: String) {
+      val builder = AlertDialog.Builder(context)
+      builder.setTitle("Delete")
+         .setMessage("Are you sure you want to remove this book from favourites?")
+         .setPositiveButton("Confirm"){a, d ->
+            Toast.makeText(context, "Deleting", Toast.LENGTH_SHORT).show()
+            viewModel.removeFromFavourite(id)
+         }
+         .setNegativeButton("Cancel") {a, d ->
+            a.dismiss()
+         }.show()
+   }
+
+   override fun onItemClick(movie: Movie) {
+      val action = FavouriteFragmentDirections.favToMovieDetailFragment(movie.id)
+      Navigation.findNavController(requireView()).navigate(action)
    }
 }

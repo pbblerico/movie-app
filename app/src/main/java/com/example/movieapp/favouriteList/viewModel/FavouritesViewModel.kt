@@ -15,11 +15,23 @@ class FavouritesViewModel(private val favouritesRepository: FavouritesRepository
     private val _favouritesListStatus = MutableLiveData<Result<List<Movie>>>()
     val favouritesListStatus: LiveData<Result<List<Movie>>> = _favouritesListStatus
 
+    private val _removeFromFavouriteStatus = MutableLiveData<Result<String>>()
+    val removeFromFavouriteStatus: LiveData<Result<String>> = _removeFromFavouriteStatus
+
     fun getFavoritesList() {
         _favouritesListStatus.postValue(Result.Loading())
         viewModelScope.launch(Dispatchers.Main) {
             favouritesRepository.getFavouritesList {
                 _favouritesListStatus.postValue(it)
+            }
+        }
+    }
+
+    fun removeFromFavourite(id: String) {
+        _removeFromFavouriteStatus.postValue(Result.Loading())
+        viewModelScope.launch(Dispatchers.Main) {
+            favouritesRepository.removeFromFavourite(id) {
+                _removeFromFavouriteStatus.postValue(it)
             }
         }
     }
