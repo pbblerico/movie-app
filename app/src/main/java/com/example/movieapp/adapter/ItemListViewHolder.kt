@@ -6,6 +6,7 @@ import androidx.viewbinding.ViewBinding
 import coil.load
 import coil.size.Scale
 import com.example.movieapp.R
+import com.example.movieapp.databinding.AdvertViewBinding
 import com.example.movieapp.databinding.ItemViewBinding
 import com.example.movieapp.models.Advert
 import com.example.movieapp.models.ListItem
@@ -14,7 +15,12 @@ import com.example.movieapp.utils.Constants
 
 class ItemListViewHolder(val binding: ViewBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(item: ListItem) {
-        bindMovies((item as ListItem.Movie).movie)
+        when(item) {
+            is ListItem.Movie ->  bindMovies(item.movie)
+            is ListItem.Ad -> bindAd(item.ad)
+            else -> null
+        }
+
     }
 
     private fun bindMovies(movie: Movie) {
@@ -31,12 +37,24 @@ class ItemListViewHolder(val binding: ViewBinding): RecyclerView.ViewHolder(bind
                     scale(Scale.FILL)
                 }
 
-                itemView.setOnClickListener { Log.d("holder", "works") }
+                itemView.setOnClickListener {
+                    onMovieClick?.invoke(movie)
+//                    Log.d("holder", "works")
+                }
                 imgLike.setOnClickListener { Log.d("holder like", "workds") }
             }
     }
 
     private fun bindAd(ad: Advert) {
-
+        (binding as AdvertViewBinding).apply {
+            advTitle.text = ad.title
+            advText.text = ad.description
+            advImg.load(ad.bannerImage) {
+                crossfade(true)
+                scale(Scale.FILL)
+            }
+        }
     }
+
+    val onMovieClick: ((Movie) -> Unit)? = null
 }

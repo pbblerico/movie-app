@@ -49,54 +49,11 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
    }
 
    private fun load() {
-//      viewModel.getMovieList(binding!!.pageTV.text.toString().toInt())
-
-
       lifecycleScope.launch {
-         viewModel.movieMultipleListPaging.collectLatest {pagingData ->
+         viewModel.movieMultipleListPaging.collectLatest { pagingData ->
             multipleAdapter?.submitData(pagingData)
-//            pagingData.map {
-//               Log.d(TAG, it.id.toString())
-//            }
          }
       }
-
-
-//      lifecycleScope.launch {
-//         viewModel.movieListPaging.collectLatest {
-//            movieAdapter?.submitData(it)
-//         }
-//      }
-//      lifecycleScope.launch {
-//         movieAdapter?.loadStateFlow?.collectLatest {
-//            when (val loadState = it.refresh) {
-//               is LoadState.Error -> {
-//                  loadState.error
-//               }
-//            }
-//         }
-//      }
-
-//      viewModel.movieListStatus.observe(viewLifecycleOwner) {
-//         when(it) {
-//            is Result.Loading -> {
-//               (requireActivity() as MainActivity).showProgressBar()
-//            }
-//            is Result.Success -> {
-//               (requireActivity() as MainActivity).hideProgressBar()
-//               movieAdapter!!.submit(/*viewModel.movieListPaging*/it.data)
-//            }
-//
-//            is Result.Failure -> {
-//               (requireActivity() as MainActivity).hideProgressBar()
-//               Toast.makeText(requireContext(), "Sorry", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            is Result.Empty -> {
-//               Toast.makeText(requireContext(), "Page is empty", Toast.LENGTH_SHORT).show()
-//            }
-//         }
-//      }
    }
 
    override fun onItemClick(movie: Movie) {
@@ -107,7 +64,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
    override fun onLikeButtonClick(movie: Movie) {
       viewModel.addToFavourite(movie)
       viewModel.addToFavStatus.observe(viewLifecycleOwner) {
-         when(it) {
+         when (it) {
             is Result.Loading -> {
                Toast.makeText(requireContext(), "Loading...", Toast.LENGTH_SHORT).show()
             }
@@ -121,17 +78,4 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
          }
       }
    }
-
-//   private fun pagePickDialog() {
-//      val pagesArray = arrayOfNulls<String>(10)
-//      for(i in pagesArray.indices) {
-//         pagesArray[i] = "${i + 1}"
-//      }
-//      val builder = AlertDialog.Builder(requireContext())
-//      builder.setTitle("Pick Page")
-//         .setItems(pagesArray) { _, which ->
-//            binding!!.pageTV.text = pagesArray[which]
-//            load()
-//         }.show()
-//   }
 }

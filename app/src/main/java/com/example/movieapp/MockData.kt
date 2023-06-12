@@ -3,6 +3,7 @@ package com.example.movieapp
 import com.example.movieapp.models.Advert
 
 class MockData {
+
     val data = listOf<Advert>(
         Advert("ARE YOU READY?", "IN ALL CINEMA OF KZ", "https://www.shutterstock.com/image-vector/red-banner-coming-soon-260nw-1024754041.jpg"),
         Advert("Let Coca Cola in your Life!", "Make movies better with Cola!", "https://d2td6mzj4f4e1e.cloudfront.net/wp-content/uploads/sites/9/2019/11/The-Original-Taste-of-Christmas-620x330.png"),

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.movieapp.R
+import com.example.movieapp.databinding.AdvertViewBinding
 import com.example.movieapp.databinding.ItemViewBinding
 import com.example.movieapp.models.ListItem
 
@@ -19,13 +20,29 @@ class ItemListAdapter: PagingDataAdapter<ListItem, ItemListViewHolder>(DiffCallb
 
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return when(getItem(position)) {
+            is ListItem.Movie -> TYPE_MOVIE
+            else -> TYPE_ADVERT
+        }
+    }
+
     override fun onBindViewHolder(holder: ItemListViewHolder, position: Int) {
         val currentItem = getItem(position)!!
         holder.bind(currentItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemListViewHolder {
-        val binding = ItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = when(viewType) {
+            TYPE_MOVIE -> ItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            else -> AdvertViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        }
+
         return ItemListViewHolder(binding)
+    }
+
+    companion object{
+        private const val TYPE_MOVIE = 0
+        private const val TYPE_ADVERT = 1
     }
 }
