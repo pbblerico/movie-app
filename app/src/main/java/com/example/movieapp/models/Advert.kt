@@ -1,6 +1,6 @@
 package com.example.movieapp.models
 
-data class Ad(
+data class Advert(
     val title: String,
     val description: String,
     val bannerImage: String

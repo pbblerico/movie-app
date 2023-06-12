@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.paging.*
+import com.example.movieapp.models.ListItem
 import com.example.movieapp.models.Movie
 import com.example.movieapp.movieList.repository.MovieRepository
 import com.example.movieapp.utils.Result
@@ -29,6 +29,42 @@ class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() 
         }
     }
 
+//    val movieListPaging: StateFlow<PagingData<Movie>> =
+//        Pager(
+//            PagingConfig(pageSize = 1)
+//        ) {
+//            movieRepository.getMoviePagingSource()
+//        }.flow
+//            .map {pagingData ->
+//                pagingData
+//                    .map {movie -> movie }
+//                    .insertSeparators { before: ListItem?, after: ListItem? ->
+//                        if (before == null && after == null) {null}
+//                        else if (after == null) { TODO("FOOTER")}
+//                        else if (before == null) { TODO("HEADER")}
+//                        else { null }
+//                    }
+//            }
+//            .cachedIn(viewModelScope).stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+
+    val movieMultipleListPaging: StateFlow<PagingData<ListItem>> =
+        Pager(
+            PagingConfig(pageSize = 1)
+        ) {
+            movieRepository.getMoviePagingSource()
+        }.flow
+//            .map {pagingData ->
+//                pagingData
+//                    .map {movie -> movie }
+//                    .insertSeparators { before: ListItem?, after: ListItem? ->
+//                        if (before == null && after == null) {null}
+//                        else if (after == null) { TODO("FOOTER")}
+//                        else if (before == null) { TODO("HEADER")}
+//                        else { null }
+//                    }
+//            }
+            .cachedIn(viewModelScope).stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+
     fun addToFavourite(movie: Movie) {
         viewModelScope.launch(Dispatchers.Main) {
             movieRepository.addToFavourite(movie){
@@ -37,8 +73,8 @@ class MovieViewModel(private val movieRepository: MovieRepository): ViewModel() 
         }
     }
 
-    val moviePaging: Flow<PagingData<Movie>> = movieRepository.getPagedMovieList().cachedIn(viewModelScope)
-    init {
-        getMovieList(1)
-    }
+//    val moviePaging: Flow<PagingData<Movie>> = movieRepository.getPagedMovieList().cachedIn(viewModelScope)
+//    init {
+//        getMovieList(1)
+//    }
 }

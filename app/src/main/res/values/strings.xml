@@ -22,4 +22,5 @@
     <string name="id">id</string>
     <string name="favList">Favourite List</string>
     <string name="movList">Movie List</string>
+    <string name="advert">Advertisement</string>
 </resources>

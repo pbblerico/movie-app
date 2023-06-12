@@ -10,6 +10,7 @@ import com.example.movieapp.favouriteList.viewModel.FavouritesViewModel
 import com.example.movieapp.movieDetail.repository.MovieDetailRepository
 import com.example.movieapp.movieDetail.repository.MovieDetailRepositoryImpl
 import com.example.movieapp.movieDetail.viewModel.MovieDetailViewModel
+import com.example.movieapp.movieList.repository.MoviePagingSource
 import com.example.movieapp.movieList.repository.MovieRepository
 import com.example.movieapp.movieList.repository.MovieRepositoryImpl
 import com.example.movieapp.movieList.viewModel.MovieViewModel
@@ -30,7 +31,8 @@ val appModule = module {
     single { okhttpClient(get()) }
     single { retrofit(get()) }
     single { apiService(get()) }
-    single<MovieRepository> { return@single MovieRepositoryImpl(get()) }
+    factory { MoviePagingSource(get()) }
+    single<MovieRepository> { return@single MovieRepositoryImpl(get(), get()) }
     single<FavouritesRepository> { return@single FavouritesRepositoryImpl()}
     single<MovieDetailRepository> { return@single MovieDetailRepositoryImpl(get()) }
 

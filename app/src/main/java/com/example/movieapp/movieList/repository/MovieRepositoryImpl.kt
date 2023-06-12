@@ -2,15 +2,15 @@ package com.example.movieapp.movieList.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingSource
 import com.example.movieapp.models.Movie
-import com.example.movieapp.paging.MoviePagingSource
 import com.example.movieapp.retrofit.api.ApiService
 import com.example.movieapp.utils.Constants
 import com.example.movieapp.utils.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MovieRepositoryImpl(private val apiService: ApiService): MovieRepository {
+class MovieRepositoryImpl(private val apiService: ApiService, private val pagingSource: MoviePagingSource): MovieRepository {
     override suspend fun getMovieList(page: Int): Result<List<Movie>> = try {
         val result = apiService.getPopularMovie(page).results
         if (result.isEmpty()) Result.Empty()
@@ -19,11 +19,13 @@ class MovieRepositoryImpl(private val apiService: ApiService): MovieRepository {
         Result.Failure(e.message ?: e.localizedMessage)
     }
 
-    override fun getPagedMovieList() = Pager(
-            PagingConfig(20)
-        ) {
-            MoviePagingSource(apiService)
-        }.flow
+//    override fun getPagedMovieList() = Pager(
+//            PagingConfig(20)
+//        ) {
+//            MoviePagingSource(apiService)
+//        }.flow
+
+    override fun getMoviePagingSource() = pagingSource
 
     override suspend fun addToFavourite(movie: Movie, result: (Result<String>) -> Unit) {
         withContext(Dispatchers.IO) {

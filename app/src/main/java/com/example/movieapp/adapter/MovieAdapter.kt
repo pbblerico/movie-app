@@ -15,7 +15,7 @@ import com.example.movieapp.models.ListItem
 import com.example.movieapp.models.Movie
 import com.example.movieapp.utils.Constants.POSTER_BASE_URL
 
-class MovieAdapter(private val onClickListener: MovieAdapterClickListener): PagingDataAdapter<ListItem, MovieAdapter.MovieViewHolder>(DiffCallback()) {
+class MovieAdapter(private val onClickListener: MovieAdapterClickListener): PagingDataAdapter<Movie, MovieAdapter.MovieViewHolder>(DiffCallback()) {
     class MovieViewHolder(val binding: ItemViewBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
             binding.apply {

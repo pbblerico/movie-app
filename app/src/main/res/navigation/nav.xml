@@ -16,6 +16,9 @@
         <action
             android:id="@+id/toSignUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/welcomeToMovieFragment"
+            app:destination="@id/movieFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

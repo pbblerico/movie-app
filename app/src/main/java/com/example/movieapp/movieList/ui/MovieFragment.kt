@@ -14,6 +14,7 @@ import androidx.paging.map
 import com.example.movieapp.MovieAdapterClickListener
 import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
+import com.example.movieapp.adapter.ItemListAdapter
 import com.example.movieapp.adapter.MovieAdapter
 import com.example.movieapp.databinding.FragmentMovieBinding
 import com.example.movieapp.models.Movie
@@ -29,6 +30,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
 
    private val TAG = "MOVIE"
    private var movieAdapter: MovieAdapter? = null
+   private var multipleAdapter: ItemListAdapter? = null
 
    override fun onCreateView(
       inflater: LayoutInflater,
@@ -38,30 +40,21 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
       binding = FragmentMovieBinding.inflate(inflater, container, false)
 
       movieAdapter = MovieAdapter(this)
+      multipleAdapter = ItemListAdapter()
 
-      binding!!.rlMovies.adapter = movieAdapter
+      binding!!.rlMovies.adapter = multipleAdapter
       load()
 
       return binding!!.root
    }
-
-   fun openDetailPage(id: Long) {
-      Log.d(TAG, "page opened")
-   }
-
-   fun addToFavourite() {
-      Log.d(TAG, "added to fav")
-   }
-
-
 
    private fun load() {
 //      viewModel.getMovieList(binding!!.pageTV.text.toString().toInt())
 
 
       lifecycleScope.launch {
-         viewModel.moviePaging.collectLatest {pagingData ->
-            movieAdapter?.submitData(pagingData)
+         viewModel.movieMultipleListPaging.collectLatest {pagingData ->
+            multipleAdapter?.submitData(pagingData)
 //            pagingData.map {
 //               Log.d(TAG, it.id.toString())
 //            }
