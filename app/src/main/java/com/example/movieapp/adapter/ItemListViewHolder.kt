@@ -20,7 +20,6 @@ class ItemListViewHolder(val binding: ViewBinding): RecyclerView.ViewHolder(bind
             is ListItem.Ad -> bindAd(item.ad)
             else -> null
         }
-
     }
 
     private fun bindMovies(movie: Movie) {
@@ -36,15 +35,8 @@ class ItemListViewHolder(val binding: ViewBinding): RecyclerView.ViewHolder(bind
                     placeholder(R.drawable.poster_placeholder)
                     scale(Scale.FILL)
                 }
-
-                itemView.setOnClickListener {
-                    onMovieClick?.invoke(movie)
-//                    Log.d("holder", "works")
-                }
-                imgLike.setOnClickListener { Log.d("holder like", "workds") }
             }
     }
-
     private fun bindAd(ad: Advert) {
         (binding as AdvertViewBinding).apply {
             advTitle.text = ad.title
@@ -55,6 +47,4 @@ class ItemListViewHolder(val binding: ViewBinding): RecyclerView.ViewHolder(bind
             }
         }
     }
-
-    val onMovieClick: ((Movie) -> Unit)? = null
 }

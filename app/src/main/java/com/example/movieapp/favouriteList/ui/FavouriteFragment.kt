@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
-import com.example.movieapp.FavouriteAdapterClickListener
 import com.example.movieapp.R
 import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.adapter.FavouritesAdapter
@@ -20,7 +19,7 @@ import com.example.movieapp.utils.Result
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteAdapterClickListener {
+class FavouriteFragment : Fragment(R.layout.fragment_favourite) {
    private var binding: FragmentFavouriteBinding? = null
    private var favouritesAdapter: FavouritesAdapter? = null
    private val viewModel by viewModel<FavouritesViewModel>()
@@ -31,7 +30,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteAdapte
       savedInstanceState: Bundle?
    ): View? {
       binding = FragmentFavouriteBinding.inflate(inflater, container, false)
-      favouritesAdapter = FavouritesAdapter(this)
+      favouritesAdapter = FavouritesAdapter({movie -> onItemClick(movie)}, {id -> removeFromFavourite(id)})
       binding!!.rlMovies.adapter = favouritesAdapter
       load()
 
@@ -69,7 +68,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteAdapte
       }
    }
 
-   override fun removeFromFavourite(id: String) {
+   private fun removeFromFavourite(id: String) {
       val builder = AlertDialog.Builder(context)
       builder.setTitle("Delete")
          .setMessage("Are you sure you want to remove this book from favourites?")
@@ -82,7 +81,7 @@ class FavouriteFragment : Fragment(R.layout.fragment_favourite), FavouriteAdapte
          }.show()
    }
 
-   override fun onItemClick(movie: Movie) {
+   private fun onItemClick(movie: Movie) {
       val action = FavouriteFragmentDirections.favToMovieDetailFragment(movie.id)
       Navigation.findNavController(requireView()).navigate(action)
    }

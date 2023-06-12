@@ -1,8 +1,6 @@
 package com.example.movieapp.movieList.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.paging.map
-import com.example.movieapp.MovieAdapterClickListener
 import com.example.movieapp.R
-import com.example.movieapp.activity.MainActivity
 import com.example.movieapp.adapter.ItemListAdapter
 import com.example.movieapp.adapter.MovieAdapter
 import com.example.movieapp.databinding.FragmentMovieBinding
@@ -24,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListener {
+class MovieFragment : Fragment(R.layout.fragment_movie){
    private var binding: FragmentMovieBinding? = null
    private val viewModel by viewModel<MovieViewModel>()
 
@@ -39,8 +34,8 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
    ): View? {
       binding = FragmentMovieBinding.inflate(inflater, container, false)
 
-      movieAdapter = MovieAdapter(this)
-      multipleAdapter = ItemListAdapter()
+//      movieAdapter = MovieAdapter(this)
+      multipleAdapter = ItemListAdapter ({ movie -> onItemClick(movie)}, {movie -> onLikeButtonClick(movie)})
 
       binding!!.rlMovies.adapter = multipleAdapter
       load()
@@ -56,12 +51,12 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapterClickListen
       }
    }
 
-   override fun onItemClick(movie: Movie) {
+   private fun onItemClick(movie: Movie) {
       val action = MovieFragmentDirections.toMovieDetailFragment(movie.id)
       Navigation.findNavController(requireView()).navigate(action)
    }
 
-   override fun onLikeButtonClick(movie: Movie) {
+   private fun onLikeButtonClick(movie: Movie) {
       viewModel.addToFavourite(movie)
       viewModel.addToFavStatus.observe(viewLifecycleOwner) {
          when (it) {

@@ -9,8 +9,9 @@ import com.example.movieapp.R
 import com.example.movieapp.databinding.AdvertViewBinding
 import com.example.movieapp.databinding.ItemViewBinding
 import com.example.movieapp.models.ListItem
+import com.example.movieapp.models.Movie
 
-class ItemListAdapter: PagingDataAdapter<ListItem, ItemListViewHolder>(DiffCallback()) {
+class ItemListAdapter(var onItemClicked: ((movie: Movie) -> Unit), var onLikeButtonClicked: (movie: Movie) -> Unit): PagingDataAdapter<ListItem, ItemListViewHolder>(DiffCallback()) {
     class DiffCallback: DiffUtil.ItemCallback<ListItem>() {
         override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
             return oldItem == newItem
@@ -30,6 +31,24 @@ class ItemListAdapter: PagingDataAdapter<ListItem, ItemListViewHolder>(DiffCallb
     override fun onBindViewHolder(holder: ItemListViewHolder, position: Int) {
         val currentItem = getItem(position)!!
         holder.bind(currentItem)
+
+        when(currentItem) {
+            is ListItem.Movie -> onMovieBindVH(holder, currentItem.movie)
+            else -> onAdvertBindVH(holder, currentItem)
+        }
+    }
+    private fun onAdvertBindVH(holder: ItemListViewHolder, currentItem: ListItem) {
+//        (holder.binding as AdvertViewBinding)
+    }
+
+    private fun onMovieBindVH(holder: ItemListViewHolder, movie: Movie) {
+        holder.itemView.setOnClickListener {
+            onItemClicked.invoke(movie)
+        }
+
+        (holder.binding as ItemViewBinding).imgLike.setOnClickListener {
+            onLikeButtonClicked.invoke(movie)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemListViewHolder {

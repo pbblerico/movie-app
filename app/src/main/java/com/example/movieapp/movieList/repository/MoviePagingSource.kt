@@ -26,10 +26,19 @@ class MoviePagingSource(private val apiService: ApiService): PagingSource<Int, L
             val prevKey = if (pageNumber > 1) pageNumber - 1 else null
             var nextKey = if (pageNumber < response.totalPages) pageNumber + 1 else null
 
+//            var list: List<ListItem> = response.results.map { movie -> ListItem.Movie(movie) }
+//            response.results.map { movie -> ListItem.Movie(movie) }
             val list = buildList<ListItem> {
                 addAll(response.results.map { movie -> ListItem.Movie(movie) })
-                ListItem.Ad(advert[(0..4).random()])
+                add(ListItem.Ad(advert[(0..4).random()]))
             }
+            Log.d("source", list.size.toString())
+//            Log.d("source", ListItem.Ad(advert[(0..4).random()]).toString())
+//            list.forEach {
+//                Log.d("source", it.toString())
+////                Log.d("Source", ListItem.Ad(advert[(0..4).random()]).toString())
+//            }
+
             LoadResult.Page(
                 data = list,
                 prevKey = prevKey,
